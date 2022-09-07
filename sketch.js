@@ -5,8 +5,8 @@ var X1 = 0, Y1, X2,Y2, dx, dy;
 
 //Funcion que define estados iniciales
 function setup() {
-
-  var c = createCanvas(600, 600);
+  //strokeWeight(2);
+  var c = createCanvas(200, 200);
   frameRate(16);
   background(200);
   c.mousePressed(click);
@@ -14,8 +14,7 @@ function setup() {
 
 //Funcion que se actualiza en tiempo real
 function draw() {
-  //Rectangulo(X1, Y1, X2, Y2);
-  //console.log("X: ", mouseX, " Y: ",mouseY);
+
 }
 
 //Rectangle
@@ -23,10 +22,10 @@ function Rectangulo(X1, Y1, X2, Y2){
   actualizar();
   X3 = X1;
   Y3 = Y2;
-  
+
   X4 = X2;
   Y4 = Y1;
-  
+
   DDA(X1, Y1, X3, Y3);
   DDA(X3, Y3, X2, Y2);
   DDA(X2, Y2, X4, Y4);
@@ -37,29 +36,29 @@ function Rectangulo(X1, Y1, X2, Y2){
 function Cuadrado(X1, Y1, X2, Y2){
   actualizar();
   diferencia = X2 - X1;
-  
+
   nX2 = X1 + diferencia
   nY2 = Y1
 
   X3 = X1;
   Y3 = Y1 - diferencia;
-  
+
   X4 = X3 + diferencia;
   Y4 = Y3;
   DDA(X1, Y1, nX2, nY2);
   DDA(X1, Y1, X3, Y3);
   DDA(X3, Y3, X4, Y4);
-  DDA(X4, Y4, nX2, nY2);  
+  DDA(X4, Y4, nX2, nY2);
 }
 
-//DDA Function 
+//DDA Function
 function DDA(X1, Y1, X2, Y2){
   stroke(1)
   let steps;
-  
-  dx = X2 - X1 
-  dy = Y2 - Y1 
-  
+
+  dx = X2 - X1
+  dy = Y2 - Y1
+
   if(abs(dx)>abs(dy)) steps=abs(dx)
   else      steps=abs(dy)
 
@@ -79,25 +78,25 @@ function click(){
       X1 = mouseX;
       Y1 = mouseY;
       fill(0);
-      ellipse(X1, Y1, 5, 5);
+      ellipse(X1, Y1, 0.5, 0.5);
       console.log("Punto 1 = X:", X1, " Y", Y1);
     }else if(document.getElementById("Trasladar").checked){
       actualizar();
       traslacion();
     }
   }
-  
+
   function mouseReleased(){
-   
-    
+
+
     if (!(document.getElementById("Trasladar").checked) && mouseX <= 600 && mouseX >= 0  && mouseY <= 600 && mouseY >=0) {
       X2 = mouseX;
       Y2 = mouseY;
       fill(0);
-      ellipse(X2, Y2,5, 5);
+      ellipse(X2, Y2,0.5, 0.5);
       if (rdCuadrado.checked === true) {
         Cuadrado(X1, Y1, X2, Y2);
-        console.log("cuadrado");        
+        console.log("cuadrado");
       } else if(rdRectangulo.checked === true){
         Rectangulo(X1, Y1, X2, Y2);
         console.log("rec");
@@ -109,13 +108,13 @@ function click(){
 //actualizar canvas
 function actualizar(){
   background(200);
-  ellipse(X1, Y1, 5, 5);
-  ellipse(X2, Y2,5, 5);
+  ellipse(X1, Y1, 0.5, 0.5);
+  ellipse(X2, Y2, 0.5, 0.5);
 }
 
-//traslacion 
+//traslacion
 function traslacion() {
-    
+
   TX = mouseX;
   TY = mouseY;
 
@@ -128,49 +127,77 @@ function traslacion() {
   Y2 = Y2 + diferenciaY;
   if (rdCuadrado.checked === true) {
     Cuadrado(X1, Y1, X2, Y2);
-    console.log("cuadrado");        
+    console.log("cuadrado");
   } else if(rdRectangulo.checked === true){
     Rectangulo(X1, Y1, X2, Y2);
     console.log("rec");
   }
 }
-
-function figura() {
-  
+ 
+function keyPressed() {
+  floddFill2(mouseX, mouseY);
 }
 
-// function keyPressed() {
-//   floodFill(mouseX, mouseY);
-  
-// }
+function floddFill2(x, y){
+  let fillStack = [];
 
-// function floodFill(x, y) {
-  
-//   console.log("hello")
-//   if (isPixel(x, y)) {
-//     return
-//   }
-  
-//   setPixel(x, y);
-  
-//   floodFill(x + 1, y);
-//   floodFill(x - 1, y);
-//   floodFill(x, y - 1);
-//   floodFill(x, y + 1);
-// }
+  fillStack.push([x, y]);
 
-// function setPixel(x, y){
-//   point(40, 0, 0);
-//   point = (x, y);
-// }
+  while(fillStack.length > 0){
+    
+    let [x, y] = fillStack.pop();
+    
+    if (!valid(x, y)) {
+      continue;
+    }
+  
+    if (isPixel(x, y)) {
+      continue;
+    }
 
-// function isPixel(x, y) {
-//   let ar = get(x, y);
-//   console.log(ar[0])
-//   console.log(x, y)
-//   return (ar[0] != 0);
-// }
+    setPixel(x, y);
 
-// function valid(x, y){
-//   return xmouseX <= 600 && mouseX >= 0  && mouseY <= 600 && mouseY >=0;
-// }
+    fillStack.push([x + 1, y]);
+    fillStack.push([x - 1, y]);
+    fillStack.push([x, y + 1]);
+    fillStack.push([x, y - 1]);
+  }
+}
+
+function floddFill(x, y){
+  console.log("Rellenar a X: ", x, " Y: ", y);
+  if (!valid(x, y)) {
+    return;
+  }
+
+  if (isPixel(x, y)) {
+    return;
+  }
+
+  setPixel(x, y);
+
+  floddFill(x + 1, y);
+  floddFill(x - 1, y);
+  floddFill(x, y + 1);
+  floddFill(x, y - 1);
+}
+
+function setPixel(x, y) {
+  stroke('purple');
+  point(x, y);
+}
+
+function isPixel(x, y) {
+  colorPixel = get(x, y);
+  if (colorPixel[0] === 200) {
+    console.log("si")
+    console.log(colorPixel)
+    return (false)
+  }
+  console.log("no es gris")
+  return (true)
+}
+
+function valid(x, y) {
+  return x >= 0 && x <= 600 && y >= 0 && y <= 600
+}
