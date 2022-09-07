@@ -1,11 +1,14 @@
+var rdCuadrado = document.getElementById("Cuadrado");
+var rdRectangulo = document.getElementById("Rectangulo");
 //Puntos DDA
 var X1 = 0, Y1, X2,Y2, dx, dy;
 
 //Funcion que define estados iniciales
 function setup() {
+
   var c = createCanvas(600, 600);
   frameRate(16);
-  background(240);
+  background(200);
   c.mousePressed(click);
 }
 
@@ -85,20 +88,27 @@ function click(){
   }
   
   function mouseReleased(){
+   
+    
     if (!(document.getElementById("Trasladar").checked) && mouseX <= 600 && mouseX >= 0  && mouseY <= 600 && mouseY >=0) {
       X2 = mouseX;
       Y2 = mouseY;
       fill(0);
       ellipse(X2, Y2,5, 5);
-      Cuadrado(X1, Y1, X2, Y2);
-      console.log("Punto 2 = X:", X2, " Y", Y2);
+      if (rdCuadrado.checked === true) {
+        Cuadrado(X1, Y1, X2, Y2);
+        console.log("cuadrado");        
+      } else if(rdRectangulo.checked === true){
+        Rectangulo(X1, Y1, X2, Y2);
+        console.log("rec");
+      }
 
     }
 }
 
 //actualizar canvas
 function actualizar(){
-  background(240);
+  background(200);
   ellipse(X1, Y1, 5, 5);
   ellipse(X2, Y2,5, 5);
 }
@@ -116,9 +126,51 @@ function traslacion() {
   Y1 = Y1 + diferenciaY;
   X2 = X2 + diferenciaX;
   Y2 = Y2 + diferenciaY;
-  Cuadrado(X1, Y1, X2, Y2);
+  if (rdCuadrado.checked === true) {
+    Cuadrado(X1, Y1, X2, Y2);
+    console.log("cuadrado");        
+  } else if(rdRectangulo.checked === true){
+    Rectangulo(X1, Y1, X2, Y2);
+    console.log("rec");
+  }
 }
 
-function floodFill(){
+function figura() {
   
 }
+
+// function keyPressed() {
+//   floodFill(mouseX, mouseY);
+  
+// }
+
+// function floodFill(x, y) {
+  
+//   console.log("hello")
+//   if (isPixel(x, y)) {
+//     return
+//   }
+  
+//   setPixel(x, y);
+  
+//   floodFill(x + 1, y);
+//   floodFill(x - 1, y);
+//   floodFill(x, y - 1);
+//   floodFill(x, y + 1);
+// }
+
+// function setPixel(x, y){
+//   point(40, 0, 0);
+//   point = (x, y);
+// }
+
+// function isPixel(x, y) {
+//   let ar = get(x, y);
+//   console.log(ar[0])
+//   console.log(x, y)
+//   return (ar[0] != 0);
+// }
+
+// function valid(x, y){
+//   return xmouseX <= 600 && mouseX >= 0  && mouseY <= 600 && mouseY >=0;
+// }
