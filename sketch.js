@@ -2,11 +2,11 @@ var rdCuadrado = document.getElementById("Cuadrado");
 var rdRectangulo = document.getElementById("Rectangulo");
 //Puntos DDA
 var X1 = 0, Y1, X2,Y2, dx, dy;
-
+canvasSize = 200
 //Funcion que define estados iniciales
 function setup() {
   //strokeWeight(2);
-  var c = createCanvas(200, 200);
+  var c = createCanvas(canvasSize , canvasSize);
   frameRate(16);
   background(200);
   c.mousePressed(click);
@@ -66,7 +66,7 @@ function DDA(X1, Y1, X2, Y2){
   yinc = dy/steps  //if dx>dy: yk+1 = yk + dy/dx   //if dx<dy: yk+1 = yk + dy/dy
 
   for (let i = 0; i < steps; i++) {
-    point(X1, Y1);
+    line(X1, Y1, X1, Y1);
     X1 = X1 + xinc;
     Y1 = Y1 +yinc;
   }
@@ -74,7 +74,7 @@ function DDA(X1, Y1, X2, Y2){
 
 //Input por clicks
 function click(){
-    if (!(document.getElementById("Trasladar").checked) && mouseX <= 600 && mouseX >= 0  && mouseY <= 600 && mouseY >=0){
+    if (!(document.getElementById("Trasladar").checked) && valid(mouseX, mouseY)){
       X1 = mouseX;
       Y1 = mouseY;
       fill(0);
@@ -89,7 +89,7 @@ function click(){
   function mouseReleased(){
 
 
-    if (!(document.getElementById("Trasladar").checked) && mouseX <= 600 && mouseX >= 0  && mouseY <= 600 && mouseY >=0) {
+    if (!(document.getElementById("Trasladar").checked) && valid(mouseX, mouseY)) {
       X2 = mouseX;
       Y2 = mouseY;
       fill(0);
@@ -107,7 +107,9 @@ function click(){
 
 //actualizar canvas
 function actualizar(){
-  background(200);
+  if (document.getElementById("Trasladar").checked) {
+    background(200);
+  }
   ellipse(X1, Y1, 0.5, 0.5);
   ellipse(X2, Y2, 0.5, 0.5);
 }
@@ -184,7 +186,7 @@ function floddFill(x, y){
 
 function setPixel(x, y) {
   stroke('purple');
-  point(x, y);
+  line(x, y, x, y);
 }
 
 function isPixel(x, y) {
@@ -199,5 +201,5 @@ function isPixel(x, y) {
 }
 
 function valid(x, y) {
-  return x >= 0 && x <= 600 && y >= 0 && y <= 600
+  return x >= 0 && x <= canvasSize && y >= 0 && y <= canvasSize
 }
