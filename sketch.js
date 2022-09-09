@@ -5,7 +5,6 @@ var X1 = 0, Y1, X2,Y2, dx, dy;
 canvasSize = 200
 //Funcion que define estados iniciales
 function setup() {
-  //strokeWeight(2);
   var c = createCanvas(canvasSize , canvasSize);
   frameRate(16);
   background(200);
@@ -35,25 +34,26 @@ function Rectangulo(X1, Y1, X2, Y2){
 //cuadrado
 function Cuadrado(X1, Y1, X2, Y2){
   actualizar();
-  diferencia = X2 - X1;
+  diferencia = Y2 - Y1;
+    nX2 = X1 
+    nY2 = Y1 + diferencia;
+    X3 = X1 - diferencia;
+    Y3 = Y1;
+    X4 = X3;
+    Y4 = Y3 + diferencia;
 
-  nX2 = X1 + diferencia
-  nY2 = Y1
+    DDA(X1, Y1, nX2, nY2);
+    DDA(X1, Y1, X3, Y3);
+    DDA(X3, Y3, X4, Y4);
+    DDA(X4, Y4, nX2, nY2);
+  }
+    
 
-  X3 = X1;
-  Y3 = Y1 - diferencia;
 
-  X4 = X3 + diferencia;
-  Y4 = Y3;
-  DDA(X1, Y1, nX2, nY2);
-  DDA(X1, Y1, X3, Y3);
-  DDA(X3, Y3, X4, Y4);
-  DDA(X4, Y4, nX2, nY2);
-}
 
 //DDA Function
 function DDA(X1, Y1, X2, Y2){
-  stroke(1)
+  stroke(1);
   let steps;
 
   dx = X2 - X1
@@ -62,8 +62,8 @@ function DDA(X1, Y1, X2, Y2){
   if(abs(dx)>abs(dy)) steps=abs(dx)
   else      steps=abs(dy)
 
-  xinc = dx/steps  //if dx>dy: xk+1 = xk + dx/dx   //if dx<dy: xk+1 = xk + dx/dy
-  yinc = dy/steps  //if dx>dy: yk+1 = yk + dy/dx   //if dx<dy: yk+1 = yk + dy/dy
+  xinc = dx/steps  
+  yinc = dy/steps 
 
   for (let i = 0; i < steps; i++) {
     line(X1, Y1, X1, Y1);
@@ -79,7 +79,6 @@ function click(){
       Y1 = mouseY;
       fill(0);
       ellipse(X1, Y1, 0.5, 0.5);
-      console.log("Punto 1 = X:", X1, " Y", Y1);
     }else if(document.getElementById("Trasladar").checked){
       actualizar();
       traslacion();
@@ -87,8 +86,6 @@ function click(){
   }
 
   function mouseReleased(){
-
-
     if (!(document.getElementById("Trasladar").checked) && valid(mouseX, mouseY)) {
       X2 = mouseX;
       Y2 = mouseY;
@@ -96,10 +93,8 @@ function click(){
       ellipse(X2, Y2,0.5, 0.5);
       if (rdCuadrado.checked === true) {
         Cuadrado(X1, Y1, X2, Y2);
-        console.log("cuadrado");
       } else if(rdRectangulo.checked === true){
         Rectangulo(X1, Y1, X2, Y2);
-        console.log("rec");
       }
 
     }
@@ -129,10 +124,8 @@ function traslacion() {
   Y2 = Y2 + diferenciaY;
   if (rdCuadrado.checked === true) {
     Cuadrado(X1, Y1, X2, Y2);
-    console.log("cuadrado");
   } else if(rdRectangulo.checked === true){
     Rectangulo(X1, Y1, X2, Y2);
-    console.log("rec");
   }
 }
  
@@ -167,7 +160,6 @@ function floddFill2(x, y){
 }
 
 function floddFill(x, y){
-  console.log("Rellenar a X: ", x, " Y: ", y);
   if (!valid(x, y)) {
     return;
   }
@@ -192,11 +184,8 @@ function setPixel(x, y) {
 function isPixel(x, y) {
   colorPixel = get(x, y);
   if (colorPixel[0] === 200) {
-    console.log("si")
-    console.log(colorPixel)
     return (false)
   }
-  console.log("no es gris")
   return (true)
 }
 
