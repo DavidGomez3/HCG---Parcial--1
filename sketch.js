@@ -128,7 +128,9 @@ function traslacion() {
 }
 
 function keyPressed() {
-  floddFill2(mouseX, mouseY);
+  if (key === 'p'){
+    floddFill2(mouseX, mouseY)
+  }
 }
 
 function floddFill2(x, y) {
