@@ -19,7 +19,7 @@ function setup() {
 //Funcion que se actualiza en tiempo real
 function draw() {}
 
-//Rectangle
+//Rectangulo 
 function Rectangulo(X1, Y1, X2, Y2) {
   actualizar();
   X3 = X1;
@@ -51,7 +51,7 @@ function Cuadrado(X1, Y1, X2, Y2) {
   DDA(X4, Y4, nX2, nY2);
 }
 
-//DDA Function
+//DDA Funcion 
 function DDA(X1, Y1, X2, Y2) {
   stroke(1);
   let steps;
